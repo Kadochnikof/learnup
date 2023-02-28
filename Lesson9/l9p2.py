@@ -8,18 +8,45 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS lists (
     product VARCHAR(64)   
 )''')
 
+def view_lists(connect, cursor):
+    cursor.execute("SELECT product FROM lists")
+    tasks = cursor.fetchall()
+    return tasks
 
+def add_product(connect, cursor):
+    product = input("Введите название продукта: ")
+    cursor.execute("INSERT INTO lists (product) VALUES (?)", [product])
+    connect.commit()
 
-cursor.execute("""INSERT INTO users VALUES 
-               ("Uchenik", "Andrei", "Kad", "48349", "kad@kad.ru", "12345"),
-               ("Uchitel", "Roman", "Swat", "12349", "learn@up.ru", "3241235"),
-               ("Passashir", "Maria", "Girl", "89446", "Mari@au.rf", "24536fgh")
-               """)
-connect.commit()
-        
-cursor.execute("SELECT login, name, surname, phone, email FROM users")
-users = cursor.fetchall()
+action = input("""Добро пожаловать в \"Список продуктов\"
+1 - вывести список продуктов
+2 - добавить продукт
+3 - Очистить список продуктов
 
+0 - выйти из программы:\n""")
+while action !="0":
+    if action == "1":
+        print("Список продуктов: ")
+        for row in view_lists(connect, cursor):
+            print(row[0])      
+              
+    elif action == "2":
+        product = input("Введите новый продукт: ")
+        cursor.execute("INSERT INTO lists (product) VALUES (?)", [product])
+        connect.commit()
+        print("Продукт \"" + product + "\" добавлен!")
+    elif action == "3":
+        cursor.execute("DELETE FROM lists")
+        connect.commit()
+        print("Список очищен")
+    else:
+        print("Команда не найдена")
+    action = input("""
+1 - вывести список продуктов
+2 - добавить продукт
+3 - Очистить список продуктов
 
-cursor.execute("DELETE FROM users")
-print(users)
+0 - выйти из программы:\n""")
+    
+    
+
