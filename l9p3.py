@@ -34,33 +34,28 @@ def change_pass(connect, cursor, search):
         print("Пароль пользователя ", search, " изменен")
 
 action = input("""Добро пожаловать в \"Систему авторизации пользователей\"
-1 - Авторизироваться
-2 - Зарегистрировать нового пользователя
+1 - вывести список пользователей
+2 - добавить пользователя
 3 - изменить пароль
 
 0 - выйти из программы:\n""")
 
 while action !="0":
     if action == "1":
-        login = input("Введите Логин пользователя: ")
-        password = input("Введите пароль: ")
-        cursor.execute("SELECT login FROM users where login = ? AND password = ?", [login, password])
-        users = cursor.fetchone()
-        if users is None:
-            print("Введено неверное имя пользователь или пароль")
-        else:
-            print("Вы успешно авторизированы в системе!")
-            break      
+        print("Список пользователей: ")
+        for row in view_users(connect, cursor):
+            print(row[0], " - ", row[1])      
               
     elif action == "2":
         login = input("Введите нового пользователя: ")
         cursor.execute("SELECT login FROM users where login = ?", [login])
         users = cursor.fetchone()
+        # check = cursor.execute("SELECT login FROM users where login = ?", [login])
         if users is None:
             password = input("Введите пароль: ")
             cursor.execute("INSERT INTO users (login, password) VALUES (?, ?)", [login, password])
             connect.commit()
-            print("Пользователь \"" + login + "\" зарегистрирован!")
+            print("Пользователь \"" + login + "\" добавлен!")
         else:
             print("Пользователь уже существует")
         
@@ -72,17 +67,12 @@ while action !="0":
             print("Такого пользователя не существует")
         else:
             change_pass(connect, cursor, search)
-            
-    elif action == "99":
-        print("Список пользователей: ")
-        for row in view_users(connect, cursor):
-            print(row[0], " - ", row[1])   
-              
+        
     else:
         print("Команда не найдена")
     action = input("""
-1 - Авторизироваться
-2 - Зарегистрировать нового пользователя
-3 - Изменить пароль
+1 - вывести список пользователей
+2 - добавить пользователя
+3 - изменить пароль
 
 0 - выйти из программы:\n""")
