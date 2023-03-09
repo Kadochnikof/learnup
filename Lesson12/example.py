@@ -17,7 +17,7 @@ def setCube():
         ent_num.delete(0, END)
         btn_go['text'] = "Ещё раз!"
         rand_num = randint(1, 6)
-        path = "images/" + str(rand_num) + ".png"
+        path = "Lesson12/images/" + "Pic" + str(rand_num) + ".png"
         img['file'] = path
 
         if user_num == rand_num:
@@ -58,7 +58,7 @@ lbl_rules = Label(text = "Бросайте кости и угадывайте в
 lbl_main.pack(side = TOP)
 lbl_rules.pack(side = TOP)
 
-img = PhotoImage(file="images/1.png")
+img = PhotoImage(file="Lesson12/images/Pic1.png")
 lbl_img = Label(image=img)
 lbl_img.pack(side=TOP)
 
